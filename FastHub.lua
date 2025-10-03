@@ -1,3 +1,4 @@
+-- FastHub | Games (połączony plik)
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 WindUI:SetTheme("Rose")
 
@@ -22,7 +23,7 @@ Rensselaer:Paragraph({
 local FarmClicked = false
 Rensselaer:Button({
     Title = "Auto Farm (Start)",
-    Callback = function()
+    Callback = function(self)
         if FarmClicked then
             WindUI:Notify({ Title = "Rensselaer County", Content = "Nie klikaj wiele razy!", Duration = 3 })
             return
@@ -117,8 +118,8 @@ JailBreak:Button({ Title = "Ubrania Policjanta (Zablokowano bo nie działa)", Lo
 task.spawn(function()
     game:GetService("UserInputService").JumpRequest:Connect(function()
         if InfinityJump then
-            local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-            if hrp then hrp.Velocity = Vector3.new(0,50,0) end
+            local ok, hrp = pcall(function() return game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") end)
+            if ok and hrp then hrp.Velocity = Vector3.new(0,50,0) end
         end
     end)
 end)
@@ -144,7 +145,9 @@ NoobTab:Input({ Title = "Co ile sekund wykonywać skrypt", Value = "5", Callback
 task.spawn(function()
     while task.wait(AutoFarmInterval) do
         if AutoFarmNoob then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/MGCactus/myscripts/main/Noob%20Tycoon%20Army.lua"))()
+            pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/MGCactus/myscripts/main/Noob%20Tycoon%20Army.lua"))()
+            end)
         end
     end
 end)
@@ -152,7 +155,9 @@ end)
 -- ================= 99 Days in Forest =================
 local DaysTab = GamesTab:Tab({ Title = '<font color="rgb(165,42,42)">99 Days in Forest</font>', Icon = "tree" })
 DaysTab:Button({ Title = "Auto Farm Diamonds", Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Farm%20Diamond%20v2.lua"))()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Farm%20Diamond%20v2.lua"))()
+    end)
     WindUI:Notify({ Title = "Diamonds", Content = "GUI spawned!", Duration = 2 })
 end })
 
@@ -160,15 +165,23 @@ end })
 local InkTab = GamesTab:Tab({ Title = '<font color="rgb(255,0,0)">Ink Game</font>', Icon = "droplet" })
 InkTab:Button({ Title = "Open Cheat", Callback = function()
     Window:Destroy()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef127382/inkgames.github.io/refs/heads/main/ringta.lua"))()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef127382/inkgames.github.io/refs/heads/main/ringta.lua"))()
+    end)
 end })
-InkTab:Paragraph({ Title = "Info", Desc = "Cheat nie stworzony przez FastHub, tylko przez Ringta", Color = Color3.fromRGB(255,255,255) })
+InkTab:Paragraph({
+    Title = "Info",
+    Desc = "Cheat nie stworzony przez FastHub.\nUwaga! Możesz dostać bana — używasz na własne ryzyko!",
+    Color = Color3.fromRGB(255,255,255)
+})
 
 -- ================= Fisch =================
 local FischTab = GamesTab:Tab({ Title = '<font color="rgb(0,255,255)">Fisch</font>', Icon = "fish" })
 FischTab:Button({ Title = "Open Cheat", Callback = function()
     Window:Destroy()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/yolobradda/eclipsefisch/refs/heads/main/eclipsefisch"))()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/yolobradda/eclipsefisch/refs/heads/main/eclipsefisch"))()
+    end)
 end })
 FischTab:Paragraph({ Title = "Info", Desc = "Cheat nie stworzony przez FastHub", Color = Color3.fromRGB(255,255,255) })
 
@@ -176,3 +189,30 @@ FischTab:Paragraph({ Title = "Info", Desc = "Cheat nie stworzony przez FastHub",
 local OtherSection = Window:Section({ Title = "Other", Opened = true })
 local CreditsTab = OtherSection:Tab({ Title = "Credits", Icon = "github" })
 CreditsTab:Paragraph({ Title = "FastHub", Desc = "Wersja: 0.3\nBy FastHub", Color = Color3.fromRGB(255,255,255) })
+
+-- Discord copy (możliwość skopiowania linku)
+local discordLink = "https://discord.gg/zR9mb2aQ6W"
+CreditsTab:Paragraph({
+    Title = "Discord",
+    Desc = "Dołącz do serwera: " .. discordLink,
+    Color = Color3.fromRGB(255,255,255)
+})
+CreditsTab:Button({
+    Title = "Kopiuj Discord (skopiuj link)",
+    Callback = function()
+        -- próbujemy skopiować do schowka jeśli executor to wspiera (setclipboard)
+        local success, err = pcall(function()
+            if setclipboard then
+                setclipboard(discordLink)
+                return true
+            else
+                error("Brak funkcji setclipboard")
+            end
+        end)
+        if success then
+            WindUI:Notify({ Title = "Discord", Content = "Link skopiowany do schowka!", Duration = 3 })
+        else
+            WindUI:Notify({ Title = "Discord", Content = "Twoje środowisko nie wspiera kopiowania. Skopiuj ręcznie:\n" .. discordLink, Duration = 5 })
+        end
+    end
+})
