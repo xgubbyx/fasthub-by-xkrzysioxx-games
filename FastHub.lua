@@ -1,18 +1,87 @@
--- FastHub | Games (połączony plik)
+-- FastHub | Games (final version)
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 WindUI:SetTheme("Rose")
 
 local Window = WindUI:CreateWindow({
     Title = "FastHub | Games",
-    Size = UDim2.fromOffset(550, 400),
-    Theme = "Rose"
+    Icon = "door-open",
+    Author = "by xKrzysioxx",
+    Folder = "Fasthubgames",
+
+    Size = UDim2.fromOffset(580, 460),
+    MinSize = Vector2.new(560, 350),
+    MaxSize = Vector2.new(850, 560),
+    Transparent = true,
+    Theme = "Dark",
+    Resizable = true,
+    SideBarWidth = 200,
+    BackgroundImageTransparency = 0.42,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
+
+    KeySystem = { 
+        Key = { "Fasthub8zxcode" },
+        Note = "To get key click Get key",
+        Thumbnail = {
+            Image = "",
+            Title = "By Fasthub",
+        },
+        URL = "https://discord.gg/zR9mb2aQ6W",
+        SaveKey = true,
+    },
 })
 
+-- ================= HOME TAB =================
+local HomeTab = Window:Tab({
+    Title = "Home",
+    Icon = "home"
+})
+
+HomeTab:Paragraph({
+    Title = "FastHub | Info",
+    Desc = "- Dodano TAB home\n- Dodano klucz",
+    Color = Color3.fromRGB(255,255,255)
+})
+
+local discordLink = "https://discord.gg/zR9mb2aQ6W"
+
+HomeTab:Paragraph({
+    Title = "Discord",
+    Desc = "Dołącz do naszego serwera: " .. discordLink,
+    Color = Color3.fromRGB(255,255,255)
+})
+
+HomeTab:Button({
+    Title = "Copy Discord link",
+    Callback = function()
+        local success, err = pcall(function()
+            if setclipboard then
+                setclipboard(discordLink)
+            else
+                error("Brak funkcji setclipboard")
+            end
+        end)
+        if success then
+            WindUI:Notify({
+                Title = "Discord",
+                Content = "✅ Link skopiowany do schowka!",
+                Duration = 3
+            })
+        else
+            WindUI:Notify({
+                Title = "Discord",
+                Content = "❌ Nie można skopiować automatycznie. Skopiuj ręcznie:\n" .. discordLink,
+                Duration = 5
+            })
+        end
+    end
+})
+
+-- ================= GAMES SECTION =================
 local GamesTab = Window:Section({ Title = "Games", Opened = true })
 
 -- ================= Rensselaer County =================
 local Rensselaer = GamesTab:Tab({ Title = '<font color="rgb(200,0,0)">Rensselaer County</font>', Icon = "car" })
-
 Rensselaer:Paragraph({
     Title = "Uwaga!",
     Desc = "Nie da się wyłączyć Auto Farm!\nAby działał poprawnie:\n1. NAJPIERW wejdź do auta\n2. Potem kliknij przycisk Auto Farm\n⚠️ Nie klikaj go wiele razy, bo mogą być błędy!",
@@ -29,47 +98,53 @@ Rensselaer:Button({
             return
         end
         FarmClicked = true
-
-        WindUI:Notify({ Title = "Rensselaer County", Content = "Anti-AFK & Auto Farm włączone!", Duration = 3 })
-
-        -- Anti-AFK
-        game:GetService("Players").LocalPlayer.Idled:connect(function()
-            warn("Anti AFK running")
-            game:GetService("VirtualUser"):CaptureController()
-            game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-        end)
-
-        -- Auto farm (uruchamia się raz, nie można wyłączyć)
-        getfenv().test = true
-        task.spawn(function()
-            while task.wait() do
-                if getfenv().test then
-                    local plr = game.Players.LocalPlayer
-                    local chr = plr.Character
-                    if not chr or not chr:FindFirstChild("Humanoid") or not chr.Humanoid.SeatPart then
-                        continue
-                    end
-
-                    local car = chr.Humanoid.SeatPart.Parent
-                    if car and car:FindFirstChild("Body") and car.Body:FindFirstChild("#Weight") then
-                        car.PrimaryPart = car.Body["#Weight"]
-
-                        if not workspace:FindFirstChild("justanormalpart") then
-                            local new = Instance.new("Part",workspace)
-                            new.Name = "justanormalpart"
-                            new.Anchored = true
-                            new.Size = Vector3.new(10000,10,10000)
-                            new.Position = chr.HumanoidRootPart.Position + Vector3.new(0,5000,0)
-                        end
-
-                        car.PrimaryPart.Velocity = car.PrimaryPart.CFrame.LookVector * 300
-                        task.wait(0.3)
-                        car:PivotTo(workspace:FindFirstChild("justanormalpart").CFrame + Vector3.new(0,7,0))
-                    end
-                end
-            end
-        end)
+        WindUI:Notify({ Title = "Rensselaer County", Content = "Anti-AFK & Auto Farm włączone!", Duration = 3 })  
+        game:GetService("Players").LocalPlayer.Idled:connect(function()  
+            warn("Anti AFK running")  
+            game:GetService("VirtualUser"):CaptureController()  
+            game:GetService("VirtualUser"):ClickButton2(Vector2.new())  
+        end)  
+        getfenv().test = true  
+        task.spawn(function()  
+            while task.wait() do  
+                if getfenv().test then  
+                    local plr = game.Players.LocalPlayer  
+                    local chr = plr.Character  
+                    if not chr or not chr:FindFirstChild("Humanoid") or not chr.Humanoid.SeatPart then  
+                        continue  
+                    end  
+                    local car = chr.Humanoid.SeatPart.Parent  
+                    if car and car:FindFirstChild("Body") and car.Body:FindFirstChild("#Weight") then  
+                        car.PrimaryPart = car.Body["#Weight"]  
+                        if not workspace:FindFirstChild("justanormalpart") then  
+                            local new = Instance.new("Part",workspace)  
+                            new.Name = "justanormalpart"  
+                            new.Anchored = true  
+                            new.Size = Vector3.new(10000,10,10000)  
+                            new.Position = chr.HumanoidRootPart.Position + Vector3.new(0,5000,0)  
+                        end  
+                        car.PrimaryPart.Velocity = car.PrimaryPart.CFrame.LookVector * 300  
+                        task.wait(0.3)  
+                        car:PivotTo(workspace:FindFirstChild("justanormalpart").CFrame + Vector3.new(0,7,0))  
+                    end  
+                end  
+            end  
+        end)  
     end
+})
+
+-- ================= Noob Tycoon =================
+local NoobTab = GamesTab:Tab({ Title = '<font color="rgb(255,255,0)">Noob Tycoon</font>', Icon = "star" })
+NoobTab:Paragraph({
+    Title = "Auto Farm Active",
+    Desc = "Nie dotykaj ekranu, nic nie rób najlepiej! Auto Farm działa 100%",
+    Color = Color3.fromRGB(255,255,255),
+    BackgroundColor = Color3.fromRGB(0,255,0)
+})
+NoobTab:Paragraph({
+    Title = "Info",
+    Desc = "Nie dostaniesz bana, skrypt jest bezpieczny",
+    Color = Color3.fromRGB(255,255,255)
 })
 
 -- ================= Boat Game =================
@@ -135,31 +210,33 @@ local HitboxEnemyUT = Color3.fromRGB(255,0,0)
 Ultimate:Colorpicker({ Title = "Hitbox Sojuszników", Default = HitboxAllyUT, Callback = function(color) HitboxAllyUT = color end })
 Ultimate:Colorpicker({ Title = "Hitbox Nie Sojuszników", Default = HitboxEnemyUT, Callback = function(color) HitboxEnemyUT = color end })
 
--- ================= Noob Tycoon =================
-local NoobTab = GamesTab:Tab({ Title = '<font color="rgb(255,255,0)">Noob Tycoon</font>', Icon = "star" })
-local AutoFarmNoob = false
-local AutoFarmInterval = 5
-NoobTab:Paragraph({ Title = "Auto Farm Active", Desc = "Nie dotykaj ekranu, nic nie rób najlepiej! Auto Farm działa 100%", Color = Color3.fromRGB(255,255,255), BackgroundColor = Color3.fromRGB(0,255,0) })
-NoobTab:Toggle({ Title = "Auto Farm", Value = false, Callback = function(state) AutoFarmNoob = state end })
-NoobTab:Input({ Title = "Co ile sekund wykonywać skrypt", Value = "5", Callback = function(value) AutoFarmInterval = tonumber(value) or 5 end })
-task.spawn(function()
-    while task.wait(AutoFarmInterval) do
-        if AutoFarmNoob then
-            pcall(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/MGCactus/myscripts/main/Noob%20Tycoon%20Army.lua"))()
-            end)
-        end
-    end
-end)
-
 -- ================= 99 Days in Forest =================
 local DaysTab = GamesTab:Tab({ Title = '<font color="rgb(165,42,42)">99 Days in Forest</font>', Icon = "tree" })
-DaysTab:Button({ Title = "Auto Farm Diamonds", Callback = function()
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Farm%20Diamond%20v2.lua"))()
-    end)
-    WindUI:Notify({ Title = "Diamonds", Content = "GUI spawned!", Duration = 2 })
-end })
+
+DaysTab:Button({
+    Title = "Auto Farm Diamonds",
+    Callback = function()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Farm%20Diamond%20v2.lua"))()
+        end)
+        WindUI:Notify({ Title = "Diamonds", Content = "GUI spawned!", Duration = 2 })
+    end
+})
+
+DaysTab:Button({
+    Title = "Open Cheat",
+    Callback = function()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))()
+        end)
+    end
+})
+
+DaysTab:Paragraph({
+    Title = "Info",
+    Desc = "Nie dostaniesz bana, skrypt jest bezpieczny!",
+    Color = Color3.fromRGB(255,255,255)
+})
 
 -- ================= Ink Game =================
 local InkTab = GamesTab:Tab({ Title = '<font color="rgb(255,0,0)">Ink Game</font>', Icon = "droplet" })
@@ -184,35 +261,3 @@ FischTab:Button({ Title = "Open Cheat", Callback = function()
     end)
 end })
 FischTab:Paragraph({ Title = "Info", Desc = "Cheat nie stworzony przez FastHub", Color = Color3.fromRGB(255,255,255) })
-
--- ================= Credits =================
-local OtherSection = Window:Section({ Title = "Other", Opened = true })
-local CreditsTab = OtherSection:Tab({ Title = "Credits", Icon = "github" })
-CreditsTab:Paragraph({ Title = "FastHub", Desc = "Wersja: 0.3\nBy FastHub", Color = Color3.fromRGB(255,255,255) })
-
--- Discord copy (możliwość skopiowania linku)
-local discordLink = "https://discord.gg/zR9mb2aQ6W"
-CreditsTab:Paragraph({
-    Title = "Discord",
-    Desc = "Dołącz do serwera: " .. discordLink,
-    Color = Color3.fromRGB(255,255,255)
-})
-CreditsTab:Button({
-    Title = "Kopiuj Discord (skopiuj link)",
-    Callback = function()
-        -- próbujemy skopiować do schowka jeśli executor to wspiera (setclipboard)
-        local success, err = pcall(function()
-            if setclipboard then
-                setclipboard(discordLink)
-                return true
-            else
-                error("Brak funkcji setclipboard")
-            end
-        end)
-        if success then
-            WindUI:Notify({ Title = "Discord", Content = "Link skopiowany do schowka!", Duration = 3 })
-        else
-            WindUI:Notify({ Title = "Discord", Content = "Twoje środowisko nie wspiera kopiowania. Skopiuj ręcznie:\n" .. discordLink, Duration = 5 })
-        end
-    end
-})
