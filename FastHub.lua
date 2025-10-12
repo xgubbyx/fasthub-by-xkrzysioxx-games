@@ -1,4 +1,4 @@
--- FastHub | Games (final version)
+-- FastHub | Games (kompletna wersja)
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 WindUI:SetTheme("Rose")
 
@@ -46,11 +46,7 @@ HomeTab:Button({
     Title = "Copy Discord link",
     Callback = function()
         local success, err = pcall(function()
-            if setclipboard then
-                setclipboard(discordLink)
-            else
-                error("Brak funkcji setclipboard")
-            end
+            if setclipboard then setclipboard(discordLink) else error("Brak funkcji setclipboard") end
         end)
         if success then
             WindUI:Notify({ Title = "Discord", Content = "✅ Link skopiowany do schowka!", Duration = 3 })
@@ -82,18 +78,20 @@ Rensselaer:Button({
         end
         FarmClicked = true
         WindUI:Notify({ Title = "Rensselaer County", Content = "Anti-AFK & Auto Farm włączone!", Duration = 3 })  
+
         game:GetService("Players").LocalPlayer.Idled:connect(function()  
             warn("Anti AFK running")  
             game:GetService("VirtualUser"):CaptureController()  
             game:GetService("VirtualUser"):ClickButton2(Vector2.new())  
         end)  
+
         getfenv().test = true  
         task.spawn(function()  
             while task.wait() do  
                 if getfenv().test then  
                     local plr = game.Players.LocalPlayer  
                     local chr = plr.Character  
-                    if not chr or not chr:FindFirstChild("Humanoid") or not chr.Humanoid.SeatPart then continue end
+                    if not chr or not chr:FindFirstChild("Humanoid") or not chr.Humanoid.SeatPart then continue end  
                     local car = chr.Humanoid.SeatPart.Parent  
                     if car and car:FindFirstChild("Body") and car.Body:FindFirstChild("#Weight") then  
                         car.PrimaryPart = car.Body["#Weight"]  
@@ -134,7 +132,6 @@ NoobTab:Paragraph({
 
 NoobTab:Toggle({ Title = "Auto Farm", Value = false, Callback = function(state) AutoFarmNoob = state end })
 NoobTab:Input({ Title = "Co ile sekund wykonywać skrypt", Value = "5", Callback = function(value) AutoFarmInterval = tonumber(value) or 5 end })
-
 task.spawn(function()
     while task.wait(AutoFarmInterval) do
         if AutoFarmNoob then
@@ -147,8 +144,8 @@ end)
 
 -- ================= Boat Game =================
 local Boat = GamesTab:Tab({ Title = '<font color="rgb(0,0,255)">Boat Game</font>', Icon = "ship" })
-local AutoFarmBoat = false
 Boat:Paragraph({ Title = "Auto Farm Active", Desc = "Nie ruszaj się w grze, auto farm działa 100%", Color = Color3.fromRGB(255,255,255), BackgroundColor = Color3.fromRGB(0,255,0) })
+local AutoFarmBoat = false
 Boat:Toggle({ Title = "Auto Farm", Value = false, Callback = function(state) AutoFarmBoat = state WindUI:Notify({Title="Boat Auto Farm", Content=state and "Enabled" or "Disabled", Duration=2}) end })
 task.spawn(function()
     local locations = {Vector3.new(-74,55,2907), Vector3.new(-51,62,3679), Vector3.new(-65,53,5215), Vector3.new(-72,57,5987), Vector3.new(-62,32,6758), Vector3.new(-87,16,7525), Vector3.new(-81,60,8300), Vector3.new(-55,-360,9488)}
@@ -174,14 +171,13 @@ JailBreak:Toggle({ Title = "Invisible", Value = false, Callback = function(state
     local char = game.Players.LocalPlayer.Character
     if char then
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") or part:IsA("MeshPart") or part:IsA("Decal") then
-                part.Transparency = state and 1 or 0
-            end
+            if part:IsA("BasePart") or part:IsA("MeshPart") then part.Transparency = state and 1 or 0 end
+            if part:IsA("Decal") then part.Transparency = state and 1 or 0 end
         end
     end
 end})
 JailBreak:Button({ Title = "Fly", Callback = function() loadstring(game:HttpGet("https://pastefy.app/IHIgGN9b/raw"))() end })
-JailBreak:Button({ Title = "Ubrania Policjanta (Zablokowano bo nie działa)", Locked = true })
+JailBreak:Button({ Title = "Ubrania Policjanta (Zablokowano)", Locked = true })
 task.spawn(function()
     game:GetService("UserInputService").JumpRequest:Connect(function()
         if InfinityJump then
@@ -194,14 +190,15 @@ end)
 -- ================= Ultimate Tag =================
 local Ultimate = GamesTab:Tab({ Title = '<font color="rgb(0,100,0)">Ultimate Tag</font>', Icon = "target" })
 local UltimateInfinity, SpeedX6 = false, false
-local HitboxAllyUT, HitboxEnemyUT = Color3.fromRGB(0,255,0), Color3.fromRGB(255,0,0)
 Ultimate:Toggle({ Title = "Infinity Jump", Value = false, Callback = function(state) UltimateInfinity = state end })
 Ultimate:Toggle({ Title = "X6 Speed", Value = false, Callback = function(state) SpeedX6 = state end })
+local HitboxAllyUT, HitboxEnemyUT = Color3.fromRGB(0,255,0), Color3.fromRGB(255,0,0)
 Ultimate:Colorpicker({ Title = "Hitbox Sojuszników", Default = HitboxAllyUT, Callback = function(color) HitboxAllyUT = color end })
 Ultimate:Colorpicker({ Title = "Hitbox Nie Sojuszników", Default = HitboxEnemyUT, Callback = function(color) HitboxEnemyUT = color end })
 
 -- ================= 99 Days in Forest =================
 local DaysTab = GamesTab:Tab({ Title = '<font color="rgb(165,42,42)">99 Days in Forest</font>', Icon = "tree" })
+DaysTab:Paragraph({ Title = "Info", Desc = "Nie dostaniesz bana, skrypt jest bezpieczny", Color = Color3.fromRGB(255,255,255) })
 DaysTab:Button({
     Title = "Auto Farm Diamonds",
     Callback = function()
@@ -219,8 +216,23 @@ DaysTab:Button({
         end)
     end
 })
-DaysTab:Paragraph({
-    Title = "Info",
-    Desc = "Nie dostaniesz bana, skrypt jest bezpieczny",
-    Color = Color3.fromRGB(255,255,255)
-})
+
+-- ================= Ink Game =================
+local InkTab = GamesTab:Tab({ Title = '<font color="rgb(255,0,0)">Ink Game</font>', Icon = "droplet" })
+InkTab:Paragraph({ Title = "Info", Desc = "Cheat nie stworzony przez FastHub\nUwaga! Możesz dostać bana — używasz na własne ryzyko!", Color = Color3.fromRGB(255,255,255) })
+InkTab:Button({ Title = "Open Cheat", Callback = function()
+    Window:Destroy()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef127382/inkgames.github.io/refs/heads/main/ringta.lua"))()
+    end)
+end })
+
+-- ================= Fisch =================
+local FischTab = GamesTab:Tab({ Title = '<font color="rgb(0,255,255)">Fisch</font>', Icon = "fish" })
+FischTab:Paragraph({ Title = "Info", Desc = "Cheat nie stworzony przez FastHub", Color = Color3.fromRGB(255,255,255) })
+FischTab:Button({ Title = "Open Cheat", Callback = function()
+    Window:Destroy()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/yolobradda/eclipsefisch/refs/heads/main/eclipsefisch"))()
+    end)
+end })
