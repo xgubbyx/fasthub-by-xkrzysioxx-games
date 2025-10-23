@@ -22,7 +22,7 @@ local Window = WindUI:CreateWindow({
         Note = "To get key click Get key",
         Thumbnail = { Image = "", Title = "By Fasthub" },
         URL = "https://discord.gg/zR9mb2aQ6W",
-        SaveKey = true,
+        SaveKey = false,
     },
 })
 
